@@ -1,0 +1,123 @@
+{%- comment -%}
+  Main Search Section
+  Search form + results display.
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <h1 class="font-serif-en text-3xl sm:text-4xl font-light text-kameya-dark tracking-wide text-center mb-8">
+      Search
+    </h1>
+
+    {%- comment -%} Search Form {%- endcomment -%}
+    <div class="max-w-lg mx-auto mb-12">
+      <form action="{{ routes.search_url }}" method="get" role="search">
+        <div class="flex border-b-2 border-kameya-dark">
+          <input
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="Search by artist, technique, material..."
+            class="flex-1 py-3 text-sm font-sans text-kameya-dark bg-transparent placeholder-kameya-warm-gray focus:outline-none"
+            aria-label="Search"
+          >
+          <button type="submit" class="px-4 text-kameya-dark hover:text-kameya-deep-red transition-colors" aria-label="Submit search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </button>
+        </div>
+        <input type="hidden" name="type" value="product,page,article">
+      </form>
+    </div>
+
+    {%- comment -%} Search Results {%- endcomment -%}
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <p class="text-xs text-kameya-warm-gray font-sans text-center mb-8">
+          {{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }} for "{{ search.terms }}"
+        </p>
+
+        {%- paginate search.results by 12 -%}
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            {%- for item in search.results -%}
+              <a href="{{ item.url }}" class="group block">
+                {%- if item.object_type == 'product' -%}
+                  <div class="relative overflow-hidden aspect-square bg-kameya-cream mb-3">
+                    {%- if item.featured_image -%}
+                      <img
+                        src="{{ item.featured_image | image_url: width: 400 }}"
+                        alt="{{ item.featured_image.alt | default: item.title }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
+                  </div>
+                  <p class="text-[10px] tracking-[0.15em] uppercase text-kameya-muted-gold font-serif-en">Product</p>
+                {%- elsif item.object_type == 'article' -%}
+                  {%- if item.image -%}
+                    <div class="relative overflow-hidden aspect-[16/9] bg-kameya-cream mb-3">
+                      <img
+                        src="{{ item.image | image_url: width: 400 }}"
+                        alt="{{ item.image.alt | default: item.title }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      >
+                    </div>
+                  {%- endif -%}
+                  <p class="text-[10px] tracking-[0.15em] uppercase text-kameya-muted-gold font-serif-en">Article</p>
+                {%- else -%}
+                  <p class="text-[10px] tracking-[0.15em] uppercase text-kameya-muted-gold font-serif-en mb-3">Page</p>
+                {%- endif -%}
+                <h3 class="font-serif-en text-sm sm:text-base text-kameya-dark leading-snug group-hover:text-kameya-deep-red transition-colors">
+                  {{ item.title }}
+                </h3>
+                {%- if item.object_type == 'product' -%}
+                  <p class="mt-1 text-sm font-serif-en text-kameya-warm-gray">{{ item.price | money }}</p>
+                {%- endif -%}
+              </a>
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="mt-12 flex items-center justify-center space-x-2" aria-label="Pagination">
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">&larr; Prev</a>
+              {%- endif -%}
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span class="px-3 py-2 border border-kameya-dark bg-kameya-dark text-white text-xs font-sans">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="px-3 py-2 text-xs text-kameya-warm-gray font-sans">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">Next &rarr;</a>
+              {%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- endpaginate -%}
+
+      {%- else -%}
+        <div class="text-center py-12">
+          <p class="font-serif-en text-lg text-kameya-warm-gray mb-2">No results found for "{{ search.terms }}".</p>
+          <p class="text-sm text-kameya-warm-gray font-sans">Please try a different search term.</p>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search Results",
+  "tag": "section",
+  "class": "main-search",
+  "settings": []
+}
+{% endschema %}

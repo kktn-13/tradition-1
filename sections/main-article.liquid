@@ -1,0 +1,72 @@
+{%- comment -%}
+  Main Article Section
+  Displays a single blog article with author and date.
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8">
+
+    {%- comment -%} Article Header {%- endcomment -%}
+    <div class="text-center mb-10">
+      <p class="font-serif-en text-xs tracking-[0.25em] uppercase text-kameya-muted-gold mb-3">
+        {{ article.published_at | date: '%B %d, %Y' }}
+      </p>
+      <h1 class="font-serif-en text-3xl sm:text-4xl font-light text-kameya-dark tracking-wide leading-snug mb-4">
+        {{ article.title }}
+      </h1>
+      {%- if article.author -%}
+        <p class="text-sm text-kameya-warm-gray font-sans">By {{ article.author }}</p>
+      {%- endif -%}
+      <div class="mt-5 flex justify-center">
+        <div class="w-12 h-px bg-kameya-muted-gold"></div>
+      </div>
+    </div>
+
+    {%- comment -%} Featured Image {%- endcomment -%}
+    {%- if article.image -%}
+      <div class="mb-10">
+        <img
+          src="{{ article.image | image_url: width: 1000 }}"
+          alt="{{ article.image.alt | default: article.title }}"
+          class="w-full h-auto"
+          loading="eager"
+        >
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Article Content {%- endcomment -%}
+    <div class="prose prose-sm sm:prose max-w-none text-kameya-dark/80 leading-relaxed font-sans">
+      {{ article.content }}
+    </div>
+
+    {%- comment -%} Tags {%- endcomment -%}
+    {%- if article.tags.size > 0 -%}
+      <div class="mt-10 pt-6 border-t border-kameya-light-gray/50 flex flex-wrap gap-2">
+        {%- for tag in article.tags -%}
+          <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="text-xs font-sans border border-kameya-light-gray px-3 py-1 text-kameya-warm-gray hover:border-kameya-dark hover:text-kameya-dark transition-colors">
+            {{ tag }}
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Back Link {%- endcomment -%}
+    <div class="mt-10 text-center">
+      <a href="{{ blog.url }}" class="inline-flex items-center font-serif-en text-xs tracking-[0.15em] uppercase text-kameya-deep-red hover:text-kameya-dark transition-colors group">
+        <svg class="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+        </svg>
+        Back to {{ blog.title }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog Article",
+  "tag": "section",
+  "class": "main-article",
+  "settings": []
+}
+{% endschema %}

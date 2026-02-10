@@ -1,0 +1,79 @@
+{%- comment -%}
+  Customer Account Page
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8">
+
+    <h1 class="font-serif-en text-3xl sm:text-4xl font-light text-kameya-dark tracking-wide text-center mb-8">
+      My Account
+    </h1>
+    <div class="flex justify-center mb-10">
+      <div class="w-12 h-px bg-kameya-muted-gold"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      {%- comment -%} Account Details {%- endcomment -%}
+      <div>
+        <h2 class="font-serif-en text-sm tracking-[0.15em] uppercase text-kameya-muted-gold mb-4">Account Details</h2>
+        <p class="text-sm text-kameya-dark font-sans">{{ customer.name }}</p>
+        <p class="text-sm text-kameya-warm-gray font-sans">{{ customer.email }}</p>
+        {%- if customer.default_address -%}
+          <div class="mt-3 text-sm text-kameya-warm-gray font-sans">
+            {{ customer.default_address | format_address }}
+          </div>
+        {%- endif -%}
+        <a href="{{ routes.account_addresses_url }}" class="inline-block mt-3 text-xs text-kameya-deep-red font-serif-en tracking-[0.1em] uppercase hover:underline">
+          Manage Addresses
+        </a>
+        <div class="mt-4">
+          <a href="{{ routes.account_logout_url }}" class="text-xs text-kameya-warm-gray font-sans hover:text-kameya-dark transition-colors underline">
+            Log out
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} Order History {%- endcomment -%}
+      <div class="lg:col-span-2">
+        <h2 class="font-serif-en text-sm tracking-[0.15em] uppercase text-kameya-muted-gold mb-4">Order History</h2>
+        {%- if customer.orders.size > 0 -%}
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm font-sans">
+              <thead>
+                <tr class="border-b border-kameya-light-gray/50">
+                  <th class="text-left py-3 text-xs tracking-[0.1em] uppercase text-kameya-warm-gray font-normal">Order</th>
+                  <th class="text-left py-3 text-xs tracking-[0.1em] uppercase text-kameya-warm-gray font-normal">Date</th>
+                  <th class="text-left py-3 text-xs tracking-[0.1em] uppercase text-kameya-warm-gray font-normal">Status</th>
+                  <th class="text-right py-3 text-xs tracking-[0.1em] uppercase text-kameya-warm-gray font-normal">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for order in customer.orders -%}
+                  <tr class="border-b border-kameya-light-gray/30">
+                    <td class="py-3">
+                      <a href="{{ order.customer_url }}" class="text-kameya-deep-red hover:underline">{{ order.name }}</a>
+                    </td>
+                    <td class="py-3 text-kameya-warm-gray">{{ order.created_at | date: '%b %d, %Y' }}</td>
+                    <td class="py-3 text-kameya-warm-gray">{{ order.financial_status_label }}</td>
+                    <td class="py-3 text-right text-kameya-dark">{{ order.total_price | money }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+        {%- else -%}
+          <p class="text-sm text-kameya-warm-gray font-sans">You haven't placed any orders yet.</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Account",
+  "tag": "section",
+  "class": "main-account",
+  "settings": []
+}
+{% endschema %}

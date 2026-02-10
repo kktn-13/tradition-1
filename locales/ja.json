@@ -4,7 +4,12 @@
     "search": "検索",
     "cart": "カート",
     "account": "アカウント",
-    "scroll": "スクロール"
+    "scroll": "スクロール",
+    "continue_shopping": "お買い物を続ける",
+    "return_home": "トップへ戻る",
+    "page_not_found": "ページが見つかりません",
+    "no_results": "結果が見つかりません",
+    "back": "戻る"
   },
   "products": {
     "product": {
@@ -13,6 +18,7 @@
       "inquire": "この作品についてお問い合わせ",
       "price_on_request": "価格はお問い合わせください",
       "inquiry_note": "専門スタッフが24時間以内に、価格・在庫状況・配送に関する詳細をご連絡いたします。",
+      "inquiry_only": "お問い合わせ",
       "view_artist": "プロフィールを見る",
       "details": "詳細",
       "materials": "素材・技法",
@@ -25,6 +31,82 @@
       "packing": "美術品梱包",
       "worldwide": "海外配送対応"
     }
+  },
+  "collections": {
+    "title": "コレクション",
+    "sort_by": "並び替え",
+    "no_products": "このコレクションには作品がありません。",
+    "browse_all": "すべて見る"
+  },
+  "cart": {
+    "title": "カート",
+    "empty": "カートは空です。",
+    "subtotal": "小計",
+    "taxes_note": "税金と送料はチェックアウト時に計算されます。",
+    "checkout": "お会計へ進む",
+    "remove": "削除",
+    "quantity": "数量"
+  },
+  "blog": {
+    "no_articles": "記事はまだありません。",
+    "back_to_blog": "{{ blog_title }}に戻る"
+  },
+  "search": {
+    "title": "検索",
+    "placeholder": "作家名、技法、素材で検索...",
+    "results_count": "「{{ terms }}」の検索結果: {{ count }}件"
+  },
+  "customer": {
+    "account": {
+      "title": "マイアカウント",
+      "details": "アカウント情報",
+      "order_history": "注文履歴",
+      "no_orders": "まだ注文はありません。",
+      "manage_addresses": "住所を管理",
+      "log_out": "ログアウト"
+    },
+    "login": {
+      "title": "ログイン",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "ログイン",
+      "forgot_password": "パスワードをお忘れですか？",
+      "create_account": "アカウント作成"
+    },
+    "register": {
+      "title": "アカウント作成",
+      "first_name": "名",
+      "last_name": "姓",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "アカウント作成",
+      "has_account": "既にアカウントをお持ちですか？ログイン"
+    },
+    "addresses": {
+      "title": "住所一覧",
+      "add_new": "新しい住所を追加",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "edit": "編集",
+      "delete": "削除",
+      "default": "デフォルト",
+      "set_default": "デフォルトの住所に設定"
+    },
+    "order": {
+      "title": "注文 {{ name }}",
+      "placed_on": "注文日: {{ date }}",
+      "back_to_account": "アカウントに戻る",
+      "subtotal": "小計",
+      "total": "合計",
+      "shipping_address": "配送先住所",
+      "billing_address": "請求先住所"
+    }
+  },
+  "password_page": {
+    "title": "まもなくオープン",
+    "message": "特別なものを準備しています。先行アクセスにはパスワードを入力してください。",
+    "submit": "入場",
+    "admin_link": "ストアオーナーですか？"
   },
   "sections": {
     "hero": {

@@ -1,0 +1,71 @@
+{%- comment -%}
+  Customer Login Page
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-sm mx-auto px-4 sm:px-6">
+
+    <h1 class="font-serif-en text-3xl font-light text-kameya-dark tracking-wide text-center mb-8">
+      Sign In
+    </h1>
+    <div class="flex justify-center mb-8">
+      <div class="w-12 h-px bg-kameya-muted-gold"></div>
+    </div>
+
+    {%- form 'customer_login' -%}
+      {%- if form.errors -%}
+        <div class="mb-6 p-3 border border-kameya-urushi-red/30 bg-kameya-urushi-red/5 text-sm text-kameya-deep-red font-sans">
+          {{ form.errors | default_errors }}
+        </div>
+      {%- endif -%}
+
+      <div class="space-y-4">
+        <div>
+          <label for="customer-email" class="block text-xs tracking-[0.1em] uppercase text-kameya-warm-gray mb-1.5 font-sans">Email</label>
+          <input
+            type="email"
+            id="customer-email"
+            name="customer[email]"
+            autocomplete="email"
+            class="w-full border border-kameya-light-gray px-4 py-3 text-sm font-sans text-kameya-dark bg-transparent focus:outline-none focus:border-kameya-dark transition-colors"
+          >
+        </div>
+        <div>
+          <label for="customer-password" class="block text-xs tracking-[0.1em] uppercase text-kameya-warm-gray mb-1.5 font-sans">Password</label>
+          <input
+            type="password"
+            id="customer-password"
+            name="customer[password]"
+            autocomplete="current-password"
+            class="w-full border border-kameya-light-gray px-4 py-3 text-sm font-sans text-kameya-dark bg-transparent focus:outline-none focus:border-kameya-dark transition-colors"
+          >
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full mt-6 flex items-center justify-center px-8 py-3.5 bg-kameya-dark text-white font-serif-en text-xs tracking-[0.2em] uppercase hover:bg-kameya-charcoal transition-colors"
+      >
+        Sign In
+      </button>
+
+      <div class="mt-6 text-center space-y-2">
+        <a href="{{ routes.account_recover_url }}" class="block text-xs text-kameya-warm-gray font-sans hover:text-kameya-dark transition-colors">
+          Forgot your password?
+        </a>
+        <a href="{{ routes.account_register_url }}" class="block text-xs text-kameya-deep-red font-sans hover:underline">
+          Create an account
+        </a>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Login",
+  "tag": "section",
+  "class": "main-login",
+  "settings": []
+}
+{% endschema %}

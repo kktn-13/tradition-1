@@ -1,0 +1,92 @@
+{%- comment -%}
+  Customer Order Detail Page
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="mb-6">
+      <a href="{{ routes.account_url }}" class="inline-flex items-center text-xs text-kameya-deep-red font-serif-en tracking-[0.1em] uppercase hover:text-kameya-dark transition-colors group">
+        <svg class="w-4 h-4 mr-1.5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
+        </svg>
+        Back to Account
+      </a>
+    </div>
+
+    <h1 class="font-serif-en text-2xl sm:text-3xl font-light text-kameya-dark tracking-wide mb-2">
+      Order {{ order.name }}
+    </h1>
+    <p class="text-sm text-kameya-warm-gray font-sans mb-8">
+      Placed on {{ order.created_at | date: '%B %d, %Y' }}
+    </p>
+
+    {%- comment -%} Order Items {%- endcomment -%}
+    <div class="border-t border-kameya-light-gray/50">
+      {%- for line_item in order.line_items -%}
+        <div class="flex items-start py-5 border-b border-kameya-light-gray/30 gap-4">
+          {%- if line_item.image -%}
+            <div class="flex-shrink-0 w-16 sm:w-20 aspect-square bg-kameya-cream overflow-hidden">
+              <img src="{{ line_item.image | image_url: width: 160 }}" alt="{{ line_item.title }}" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          {%- endif -%}
+          <div class="flex-1 min-w-0">
+            <h3 class="font-serif-en text-sm text-kameya-dark">{{ line_item.title }}</h3>
+            {%- if line_item.variant.title != 'Default Title' -%}
+              <p class="text-xs text-kameya-warm-gray font-sans mt-0.5">{{ line_item.variant.title }}</p>
+            {%- endif -%}
+            <p class="text-xs text-kameya-warm-gray font-sans mt-1">Qty: {{ line_item.quantity }}</p>
+          </div>
+          <p class="font-serif-en text-sm text-kameya-dark">{{ line_item.final_line_price | money }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Order Summary {%- endcomment -%}
+    <div class="mt-6 flex justify-end">
+      <div class="w-full sm:w-80 space-y-2 text-sm font-sans">
+        <div class="flex justify-between">
+          <span class="text-kameya-warm-gray">Subtotal</span>
+          <span class="text-kameya-dark">{{ order.line_items_subtotal_price | money }}</span>
+        </div>
+        {%- for shipping_method in order.shipping_methods -%}
+          <div class="flex justify-between">
+            <span class="text-kameya-warm-gray">Shipping ({{ shipping_method.title }})</span>
+            <span class="text-kameya-dark">{{ shipping_method.price | money }}</span>
+          </div>
+        {%- endfor -%}
+        {%- for tax_line in order.tax_lines -%}
+          <div class="flex justify-between">
+            <span class="text-kameya-warm-gray">Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</span>
+            <span class="text-kameya-dark">{{ tax_line.price | money }}</span>
+          </div>
+        {%- endfor -%}
+        <div class="flex justify-between pt-2 border-t border-kameya-light-gray/50 font-serif-en text-base">
+          <span class="text-kameya-dark">Total</span>
+          <span class="text-kameya-dark">{{ order.total_price | money }}</span>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Addresses {%- endcomment -%}
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <div>
+        <h2 class="font-serif-en text-xs tracking-[0.15em] uppercase text-kameya-muted-gold mb-3">Shipping Address</h2>
+        <div class="text-sm text-kameya-warm-gray font-sans">{{ order.shipping_address | format_address }}</div>
+      </div>
+      <div>
+        <h2 class="font-serif-en text-xs tracking-[0.15em] uppercase text-kameya-muted-gold mb-3">Billing Address</h2>
+        <div class="text-sm text-kameya-warm-gray font-sans">{{ order.billing_address | format_address }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer Order",
+  "tag": "section",
+  "class": "main-order",
+  "settings": []
+}
+{% endschema %}

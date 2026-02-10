@@ -1,0 +1,83 @@
+{%- comment -%}
+  Main Blog Section
+  Displays blog article list in a grid.
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <h1 class="font-serif-en text-3xl sm:text-4xl font-light text-kameya-dark tracking-wide text-center mb-8">
+      {{ blog.title }}
+    </h1>
+    <div class="flex justify-center mb-12">
+      <div class="w-12 h-px bg-kameya-muted-gold"></div>
+    </div>
+
+    {%- paginate blog.articles by 9 -%}
+      {%- if blog.articles.size > 0 -%}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {%- for article in blog.articles -%}
+            <a href="{{ article.url }}" class="group block">
+              {%- if article.image -%}
+                <div class="relative overflow-hidden aspect-[16/10] bg-kameya-cream mb-4">
+                  <img
+                    src="{{ article.image | image_url: width: 600 }}"
+                    alt="{{ article.image.alt | default: article.title }}"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  >
+                </div>
+              {%- endif -%}
+              <p class="text-[10px] tracking-[0.15em] uppercase text-kameya-muted-gold font-serif-en mb-1">
+                {{ article.published_at | date: '%B %d, %Y' }}
+              </p>
+              <h2 class="font-serif-en text-lg text-kameya-dark leading-snug group-hover:text-kameya-deep-red transition-colors mb-2">
+                {{ article.title }}
+              </h2>
+              {%- if article.excerpt != blank -%}
+                <p class="text-sm text-kameya-warm-gray font-sans leading-relaxed line-clamp-3">
+                  {{ article.excerpt_or_content | strip_html | truncatewords: 25 }}
+                </p>
+              {%- endif -%}
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="mt-12 flex items-center justify-center space-x-2" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">&larr; Prev</a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">{{ part.title }}</a>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <span class="px-3 py-2 border border-kameya-dark bg-kameya-dark text-white text-xs font-sans">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="px-3 py-2 text-xs text-kameya-warm-gray font-sans">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">Next &rarr;</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class="text-center py-16">
+          <p class="font-serif-en text-lg text-kameya-warm-gray">No articles yet.</p>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog Posts",
+  "tag": "section",
+  "class": "main-blog",
+  "settings": []
+}
+{% endschema %}

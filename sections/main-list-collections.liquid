@@ -1,0 +1,64 @@
+{%- comment -%}
+  Main List Collections Section
+  Displays all collections in a grid.
+{%- endcomment -%}
+
+<section class="py-10 sm:py-14 lg:py-20">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <h1 class="font-serif-en text-3xl sm:text-4xl font-light text-kameya-dark tracking-wide text-center mb-8">
+      Collections
+    </h1>
+    <div class="flex justify-center mb-12">
+      <div class="w-12 h-px bg-kameya-muted-gold"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {%- for collection in collections -%}
+        {%- unless collection.handle == 'frontpage' -%}
+          <a href="{{ collection.url }}" class="group block">
+            <div class="relative overflow-hidden aspect-[4/3] bg-kameya-cream mb-4">
+              {%- if collection.image -%}
+                <img
+                  src="{{ collection.image | image_url: width: 600 }}"
+                  alt="{{ collection.image.alt | default: collection.title }}"
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                >
+              {%- elsif collection.products.first and collection.products.first.featured_image -%}
+                <img
+                  src="{{ collection.products.first.featured_image | image_url: width: 600 }}"
+                  alt="{{ collection.title }}"
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="w-full h-full flex items-center justify-center">
+                  <svg class="w-12 h-12 text-kameya-light-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </div>
+              {%- endif -%}
+              <div class="absolute inset-0 bg-kameya-dark/20 group-hover:bg-kameya-dark/40 transition-colors duration-500"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <h2 class="font-serif-en text-xl sm:text-2xl text-white tracking-wide text-center px-4">
+                  {{ collection.title }}
+                </h2>
+              </div>
+            </div>
+            <p class="text-xs text-kameya-warm-gray font-sans text-center">
+              {{ collection.products_count }} {{ collection.products_count | pluralize: 'piece', 'pieces' }}
+            </p>
+          </a>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections List",
+  "tag": "section",
+  "class": "main-list-collections",
+  "settings": []
+}
+{% endschema %}

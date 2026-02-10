@@ -4,7 +4,12 @@
     "search": "Search",
     "cart": "Cart",
     "account": "Account",
-    "scroll": "Scroll"
+    "scroll": "Scroll",
+    "continue_shopping": "Continue Shopping",
+    "return_home": "Return Home",
+    "page_not_found": "Page Not Found",
+    "no_results": "No results found",
+    "back": "Back"
   },
   "products": {
     "product": {
@@ -13,6 +18,7 @@
       "inquire": "Inquire About This Piece",
       "price_on_request": "Price on Request",
       "inquiry_note": "Our specialists will respond within 24 hours with pricing, availability, and shipping details.",
+      "inquiry_only": "Inquiry Only",
       "view_artist": "View Profile",
       "details": "Details",
       "materials": "Materials & Technique",
@@ -25,6 +31,82 @@
       "packing": "Museum-Grade Packing",
       "worldwide": "Worldwide Shipping"
     }
+  },
+  "collections": {
+    "title": "Collections",
+    "sort_by": "Sort by",
+    "no_products": "No pieces found in this collection.",
+    "browse_all": "Browse All"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty.",
+    "subtotal": "Subtotal",
+    "taxes_note": "Taxes and shipping calculated at checkout.",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove",
+    "quantity": "Quantity"
+  },
+  "blog": {
+    "no_articles": "No articles yet.",
+    "back_to_blog": "Back to {{ blog_title }}"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search by artist, technique, material...",
+    "results_count": "{{ count }} results for \"{{ terms }}\""
+  },
+  "customer": {
+    "account": {
+      "title": "My Account",
+      "details": "Account Details",
+      "order_history": "Order History",
+      "no_orders": "You haven't placed any orders yet.",
+      "manage_addresses": "Manage Addresses",
+      "log_out": "Log out"
+    },
+    "login": {
+      "title": "Sign In",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "forgot_password": "Forgot your password?",
+      "create_account": "Create an account"
+    },
+    "register": {
+      "title": "Create Account",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create Account",
+      "has_account": "Already have an account? Sign in"
+    },
+    "addresses": {
+      "title": "Your Addresses",
+      "add_new": "Add New Address",
+      "save": "Save Address",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "default": "Default",
+      "set_default": "Set as default address"
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "placed_on": "Placed on {{ date }}",
+      "back_to_account": "Back to Account",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "shipping_address": "Shipping Address",
+      "billing_address": "Billing Address"
+    }
+  },
+  "password_page": {
+    "title": "Opening Soon",
+    "message": "We are preparing something extraordinary. Enter the password below for early access.",
+    "submit": "Enter",
+    "admin_link": "Are you the store owner?"
   },
   "sections": {
     "hero": {

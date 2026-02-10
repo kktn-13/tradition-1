@@ -1,0 +1,174 @@
+{%- comment -%}
+  Main Collection Section
+  Displays collection products in a luxury grid layout with filtering.
+{%- endcomment -%}
+
+{%- liquid
+  assign products_per_page = section.settings.products_per_page | default: 12
+  assign columns = section.settings.columns | default: 3
+-%}
+
+<section class="py-8 sm:py-12 lg:py-16">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    {%- comment -%} Collection Header {%- endcomment -%}
+    <div class="text-center mb-10 lg:mb-14">
+      <h1 class="font-serif-en text-3xl sm:text-4xl lg:text-5xl font-light text-kameya-dark tracking-wide">
+        {{ collection.title }}
+      </h1>
+      {%- if collection.description != blank -%}
+        <div class="mt-4 max-w-2xl mx-auto text-sm text-kameya-warm-gray leading-relaxed font-sans">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+      <div class="mt-5 flex justify-center">
+        <div class="w-12 h-px bg-kameya-muted-gold"></div>
+      </div>
+    </div>
+
+    {%- comment -%} Sort & Count Bar {%- endcomment -%}
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-kameya-light-gray/50">
+      <p class="text-xs text-kameya-warm-gray font-sans">
+        {{ collection.products_count }} {{ collection.products_count | pluralize: 'piece', 'pieces' }}
+      </p>
+      <div class="flex items-center space-x-2">
+        <label for="sort-by" class="text-xs text-kameya-warm-gray font-sans">Sort by:</label>
+        <select
+          id="sort-by"
+          class="text-xs text-kameya-dark bg-transparent border border-kameya-light-gray px-3 py-1.5 font-sans focus:outline-none focus:border-kameya-dark"
+          onchange="window.location.href = this.value;"
+        >
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.url }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+              {{ option.name }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+
+    {%- comment -%} Product Grid {%- endcomment -%}
+    {%- paginate collection.products by products_per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="grid grid-cols-2 lg:grid-cols-{{ columns }} gap-4 sm:gap-6 lg:gap-8">
+          {%- for product in collection.products -%}
+            <a href="{{ product.url }}" class="group block">
+              <div class="relative overflow-hidden aspect-square bg-kameya-cream mb-3">
+                {%- if product.featured_image != blank -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    srcset="
+                      {{ product.featured_image | image_url: width: 300 }} 300w,
+                      {{ product.featured_image | image_url: width: 450 }} 450w,
+                      {{ product.featured_image | image_url: width: 600 }} 600w
+                    "
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, {{ 100 | divided_by: columns }}vw"
+                    alt="{{ product.featured_image.alt | default: product.title }}"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <div class="w-full h-full flex items-center justify-center">
+                    <svg class="w-12 h-12 text-kameya-light-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  </div>
+                {%- endif -%}
+
+                {%- if product.tags contains 'is_luxury' -%}
+                  <div class="absolute top-3 left-3">
+                    <span class="bg-kameya-dark/80 backdrop-blur-sm text-kameya-muted-gold text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 font-serif-en">
+                      Inquiry Only
+                    </span>
+                  </div>
+                {%- endif -%}
+
+                {%- unless product.available -%}
+                  <div class="absolute inset-0 bg-kameya-offwhite/60 flex items-center justify-center">
+                    <span class="text-xs tracking-[0.2em] uppercase text-kameya-warm-gray font-serif-en">Sold</span>
+                  </div>
+                {%- endunless -%}
+              </div>
+
+              {%- if product.vendor != blank -%}
+                <p class="text-[10px] tracking-[0.15em] uppercase text-kameya-muted-gold font-serif-en mb-0.5">
+                  {{ product.vendor }}
+                </p>
+              {%- endif -%}
+
+              <h3 class="font-serif-en text-sm sm:text-base text-kameya-dark leading-snug group-hover:text-kameya-deep-red transition-colors">
+                {{ product.title }}
+              </h3>
+
+              <p class="mt-1 text-sm font-serif-en text-kameya-warm-gray">
+                {%- if product.tags contains 'is_luxury' -%}
+                  Price on Request
+                {%- else -%}
+                  {{ product.price | money }}
+                {%- endif -%}
+              </p>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Pagination {%- endcomment -%}
+        {%- if paginate.pages > 1 -%}
+          <nav class="mt-12 lg:mt-16 flex items-center justify-center space-x-2" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">&larr; Prev</a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">{{ part.title }}</a>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <span class="px-3 py-2 border border-kameya-dark bg-kameya-dark text-white text-xs font-sans">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="px-3 py-2 text-xs text-kameya-warm-gray font-sans">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="px-3 py-2 border border-kameya-light-gray text-xs text-kameya-dark hover:border-kameya-dark transition-colors font-sans">Next &rarr;</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class="text-center py-16">
+          <p class="font-serif-en text-lg text-kameya-warm-gray">No pieces found in this collection.</p>
+          <a href="{{ routes.all_products_collection_url }}" class="inline-block mt-6 border border-kameya-dark text-kameya-dark px-8 py-3 font-serif-en text-xs tracking-[0.2em] uppercase hover:bg-kameya-dark hover:text-white transition-all">
+            Browse All
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Products",
+  "tag": "section",
+  "class": "main-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12,
+      "label": "Products per page"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Grid columns (desktop)",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ]
+    }
+  ]
+}
+{% endschema %}
