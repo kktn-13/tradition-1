@@ -1,0 +1,285 @@
+{%- comment -%}
+  Story Section
+  Magazine-style alternating image/text layout for storytelling.
+  Used for "Message from the President", material stories (Jindai Zelkova), etc.
+{%- endcomment -%}
+
+{%- liquid
+  assign heading    = section.settings.heading
+  assign subheading = section.settings.subheading
+-%}
+
+<section id="story-{{ section.id }}" class="py-16 sm:py-20 lg:py-28 bg-{{ section.settings.bg_color }}">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    {%- comment -%} Section Header {%- endcomment -%}
+    {%- if heading != blank or subheading != blank -%}
+      <div class="text-center mb-14 lg:mb-20">
+        {%- if subheading != blank -%}
+          <p class="font-serif-en text-xs sm:text-sm tracking-[0.3em] uppercase text-kameya-muted-gold mb-3">
+            {{ subheading }}
+          </p>
+        {%- endif -%}
+        {%- if heading != blank -%}
+          <h2 class="font-serif-en text-2xl sm:text-3xl lg:text-4xl font-light text-kameya-dark tracking-wide">
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        <div class="mt-4 flex justify-center">
+          <div class="w-12 h-px bg-kameya-muted-gold"></div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Story Blocks {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+
+        {%- when 'story_row' -%}
+          {%- liquid
+            assign reverse = false
+            if section.settings.alternate_layout
+              assign mod = forloop.index0 | modulo: 2
+              if mod == 1
+                assign reverse = true
+              endif
+            endif
+            if block.settings.image_position == 'right'
+              assign reverse = true
+            elsif block.settings.image_position == 'left'
+              assign reverse = false
+            endif
+          -%}
+
+          <div
+            class="story-row grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center {% unless forloop.last %}mb-16 lg:mb-24{% endunless %}"
+            {{ block.shopify_attributes }}
+          >
+            {%- comment -%} Image {%- endcomment -%}
+            <div class="{% if reverse %}lg:order-2{% endif %}">
+              {%- if block.settings.image != blank -%}
+                <div class="relative overflow-hidden">
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1000 }}"
+                    srcset="
+                      {{ block.settings.image | image_url: width: 500 }} 500w,
+                      {{ block.settings.image | image_url: width: 750 }} 750w,
+                      {{ block.settings.image | image_url: width: 1000 }} 1000w
+                    "
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                    class="w-full h-auto"
+                    loading="lazy"
+                  >
+                  {%- if block.settings.image_caption != blank -%}
+                    <p class="mt-2 text-xs text-kameya-warm-gray italic font-sans">
+                      {{ block.settings.image_caption }}
+                    </p>
+                  {%- endif -%}
+                </div>
+              {%- else -%}
+                <div class="aspect-[4/3] bg-kameya-cream flex items-center justify-center">
+                  <svg class="w-16 h-16 text-kameya-light-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+              {%- endif -%}
+            </div>
+
+            {%- comment -%} Text {%- endcomment -%}
+            <div class="{% if reverse %}lg:order-1{% endif %}">
+              {%- if block.settings.label != blank -%}
+                <p class="font-serif-en text-xs tracking-[0.25em] uppercase text-kameya-muted-gold mb-3">
+                  {{ block.settings.label }}
+                </p>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <h3 class="font-serif-en text-xl sm:text-2xl lg:text-3xl font-light text-kameya-dark leading-snug mb-5">
+                  {{ block.settings.title }}
+                </h3>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <div class="prose prose-sm max-w-none text-kameya-dark/70 leading-relaxed font-sans">
+                  {{ block.settings.body }}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.cta_text != blank and block.settings.cta_link != blank -%}
+                <div class="mt-6">
+                  <a
+                    href="{{ block.settings.cta_link }}"
+                    class="inline-flex items-center font-serif-en text-xs tracking-[0.15em] uppercase text-kameya-deep-red hover:text-kameya-dark transition-colors group"
+                  >
+                    {{ block.settings.cta_text }}
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+
+        {%- when 'full_width_quote' -%}
+          <div class="story-quote text-center py-12 lg:py-16 {% unless forloop.last %}mb-16 lg:mb-24{% endunless %}" {{ block.shopify_attributes }}>
+            <blockquote class="max-w-3xl mx-auto">
+              <p class="font-serif-en text-xl sm:text-2xl lg:text-3xl font-light text-kameya-dark leading-relaxed italic">
+                "{{ block.settings.quote }}"
+              </p>
+              {%- if block.settings.attribution != blank -%}
+                <footer class="mt-5">
+                  <cite class="not-italic font-serif-en text-sm tracking-[0.15em] uppercase text-kameya-muted-gold">
+                    — {{ block.settings.attribution }}
+                  </cite>
+                </footer>
+              {%- endif -%}
+            </blockquote>
+          </div>
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Story Section",
+  "tag": "section",
+  "class": "story-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Section Subheading",
+      "default": "Heritage & Craftsmanship"
+    },
+    {
+      "type": "checkbox",
+      "id": "alternate_layout",
+      "label": "Alternate image position (left/right)",
+      "default": true,
+      "info": "Automatically alternates image placement for each row."
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "white",
+      "options": [
+        { "value": "white",           "label": "White" },
+        { "value": "kameya-offwhite", "label": "Off White" },
+        { "value": "kameya-cream",    "label": "Cream" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story_row",
+      "name": "Story Row",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_caption",
+          "label": "Image Caption"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image Position",
+          "default": "auto",
+          "options": [
+            { "value": "auto",  "label": "Auto (alternating)" },
+            { "value": "left",  "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label / Eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Story Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body Text"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Link Text"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Link URL"
+        }
+      ]
+    },
+    {
+      "type": "full_width_quote",
+      "name": "Pull Quote",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Each piece carries within it the spirit of centuries."
+        },
+        {
+          "type": "text",
+          "id": "attribution",
+          "label": "Attribution",
+          "default": "President, Kameya Japan Tradition"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Story Section",
+      "category": "Content",
+      "blocks": [
+        {
+          "type": "story_row",
+          "settings": {
+            "label": "Message from the President",
+            "title": "Bridging Tradition and the World",
+            "body": "<p>For generations, Japan's master artisans have poured their souls into creating works of extraordinary beauty. At Kameya Japan Tradition, we believe these treasures deserve a global stage — one that honors their heritage while connecting them with discerning collectors worldwide.</p>"
+          }
+        },
+        {
+          "type": "full_width_quote",
+          "settings": {
+            "quote": "True craftsmanship transcends borders. It speaks a universal language of beauty, patience, and devotion.",
+            "attribution": "President, Kameya Japan Tradition"
+          }
+        },
+        {
+          "type": "story_row",
+          "settings": {
+            "label": "Rare Materials",
+            "title": "Jindai Zelkova — Wood from the Ancient Past",
+            "body": "<p>Buried beneath the earth for thousands of years, Jindai Zelkova (神代欅) emerges with a color and grain that cannot be replicated. This prehistoric timber, excavated from river beds and volcanic deposits, carries the weight of millennia — making each piece carved from it a bridge between the ancient world and the present.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

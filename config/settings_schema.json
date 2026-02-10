@@ -1,0 +1,90 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Kameya Japan Tradition",
+    "theme_version": "1.0.0",
+    "theme_author": "Kameya Dev Team",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Branding",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32x32px PNG recommended."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Social Sharing Image",
+        "info": "1200x630px recommended for Open Graph."
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Primary Palette"
+      },
+      {
+        "type": "color",
+        "id": "color_offwhite",
+        "label": "Off White (Background)",
+        "default": "#F5F2ED"
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Dark (Text / Accents)",
+        "default": "#1A1A1A"
+      },
+      {
+        "type": "color",
+        "id": "color_deep_red",
+        "label": "Deep Red (Urushi Accent)",
+        "default": "#8B1A1A"
+      },
+      {
+        "type": "color",
+        "id": "color_gold",
+        "label": "Gold (Kinpaku Accent)",
+        "default": "#B8963E"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      }
+    ]
+  }
+]

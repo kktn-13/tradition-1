@@ -1,0 +1,360 @@
+{%- comment -%}
+  Featured Artists Section
+  Grid display of master artisans with image, name, title/honors.
+  Supports metafield-driven data via blocks for maximum flexibility.
+{%- endcomment -%}
+
+{%- liquid
+  assign heading     = section.settings.heading
+  assign subheading  = section.settings.subheading
+  assign columns     = section.settings.columns
+  assign cta_text    = section.settings.cta_text
+  assign cta_link    = section.settings.cta_link
+-%}
+
+<section id="featured-artists-{{ section.id }}" class="py-16 sm:py-20 lg:py-28 bg-{{ section.settings.bg_color }}">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    {%- comment -%} Section Header {%- endcomment -%}
+    <div class="text-center mb-12 lg:mb-16">
+      {%- if subheading != blank -%}
+        <p class="font-serif-en text-xs sm:text-sm tracking-[0.3em] uppercase text-kameya-muted-gold mb-3">
+          {{ subheading }}
+        </p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h2 class="font-serif-en text-2xl sm:text-3xl lg:text-4xl font-light text-kameya-dark tracking-wide">
+          {{ heading }}
+        </h2>
+      {%- endif -%}
+      <div class="mt-4 flex justify-center">
+        <div class="w-12 h-px bg-kameya-muted-gold"></div>
+      </div>
+    </div>
+
+    {%- comment -%} Artists Grid {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-{{ columns }} gap-6 lg:gap-8">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'artist' -%}
+              <div class="artist-card group cursor-pointer" {{ block.shopify_attributes }}>
+                {%- comment -%} Artist Image {%- endcomment -%}
+                <div class="relative overflow-hidden aspect-[3/4] bg-kameya-cream">
+                  {%- if block.settings.artist_image != blank -%}
+                    <img
+                      src="{{ block.settings.artist_image | image_url: width: 800 }}"
+                      srcset="
+                        {{ block.settings.artist_image | image_url: width: 400 }} 400w,
+                        {{ block.settings.artist_image | image_url: width: 600 }} 600w,
+                        {{ block.settings.artist_image | image_url: width: 800 }} 800w
+                      "
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, {{ 100 | divided_by: columns }}vw"
+                      alt="{{ block.settings.artist_name | default: 'Artist' }}"
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <div class="w-full h-full flex items-center justify-center bg-kameya-cream">
+                      <svg class="w-16 h-16 text-kameya-light-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      </svg>
+                    </div>
+                  {%- endif -%}
+
+                  {%- comment -%} Hover Overlay with brief bio {%- endcomment -%}
+                  {%- if block.settings.artist_brief != blank -%}
+                    <div class="absolute inset-0 bg-kameya-dark/70 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div class="p-5 sm:p-6">
+                        <p class="text-white/90 text-sm leading-relaxed font-sans">
+                          {{ block.settings.artist_brief }}
+                        </p>
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                  {%- comment -%} Honor Badge {%- endcomment -%}
+                  {%- if block.settings.artist_honor != blank -%}
+                    <div class="absolute top-4 left-4">
+                      <span class="inline-block bg-kameya-dark/80 backdrop-blur-sm text-kameya-muted-gold text-[10px] sm:text-xs tracking-[0.15em] uppercase px-3 py-1.5 font-serif-en">
+                        {{ block.settings.artist_honor }}
+                      </span>
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                {%- comment -%} Artist Info {%- endcomment -%}
+                <div class="mt-4 sm:mt-5">
+                  {%- if block.settings.artist_name != blank -%}
+                    <h3 class="font-serif-en text-lg sm:text-xl font-medium text-kameya-dark tracking-wide">
+                      {%- if block.settings.artist_link != blank -%}
+                        <a href="{{ block.settings.artist_link }}" class="hover:text-kameya-deep-red transition-colors">
+                          {{ block.settings.artist_name }}
+                        </a>
+                      {%- else -%}
+                        {{ block.settings.artist_name }}
+                      {%- endif -%}
+                    </h3>
+                  {%- endif -%}
+
+                  {%- if block.settings.artist_name_jp != blank -%}
+                    <p class="font-serif-jp text-sm text-kameya-warm-gray mt-0.5">
+                      {{ block.settings.artist_name_jp }}
+                    </p>
+                  {%- endif -%}
+
+                  {%- if block.settings.artist_craft != blank -%}
+                    <p class="font-sans text-xs tracking-[0.15em] uppercase text-kameya-warm-gray mt-2">
+                      {{ block.settings.artist_craft }}
+                    </p>
+                  {%- endif -%}
+
+                  {%- comment -%} Career Highlights (metafield-like data via block setting) {%- endcomment -%}
+                  {%- if block.settings.artist_career_highlights != blank -%}
+                    <div class="mt-3 border-t border-kameya-light-gray/50 pt-3">
+                      <p class="text-xs text-kameya-warm-gray leading-relaxed">
+                        {{ block.settings.artist_career_highlights }}
+                      </p>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            {%- when 'artist_from_page' -%}
+              {%- comment -%}
+                Alternative block type that pulls data from a Shopify Page
+                using metafields. The page should have metafields defined:
+                  - artist.portrait (file_reference)
+                  - artist.name_en (single_line_text)
+                  - artist.name_jp (single_line_text)
+                  - artist.honor (single_line_text)
+                  - artist.craft (single_line_text)
+                  - artist.bio (multi_line_text)
+                  - artist.career_highlights (multi_line_text)
+              {%- endcomment -%}
+              {%- assign artist_page = block.settings.artist_page -%}
+              {%- if artist_page != blank -%}
+                <div class="artist-card group cursor-pointer" {{ block.shopify_attributes }}>
+                  <div class="relative overflow-hidden aspect-[3/4] bg-kameya-cream">
+                    {%- if artist_page.metafields.artist.portrait.value -%}
+                      <img
+                        src="{{ artist_page.metafields.artist.portrait.value | image_url: width: 800 }}"
+                        alt="{{ artist_page.metafields.artist.name_en.value | default: artist_page.title }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
+
+                    {%- if artist_page.metafields.artist.honor.value != blank -%}
+                      <div class="absolute top-4 left-4">
+                        <span class="inline-block bg-kameya-dark/80 backdrop-blur-sm text-kameya-muted-gold text-[10px] sm:text-xs tracking-[0.15em] uppercase px-3 py-1.5 font-serif-en">
+                          {{ artist_page.metafields.artist.honor.value }}
+                        </span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  <div class="mt-4 sm:mt-5">
+                    <h3 class="font-serif-en text-lg sm:text-xl font-medium text-kameya-dark tracking-wide">
+                      <a href="{{ artist_page.url }}" class="hover:text-kameya-deep-red transition-colors">
+                        {{ artist_page.metafields.artist.name_en.value | default: artist_page.title }}
+                      </a>
+                    </h3>
+                    {%- if artist_page.metafields.artist.name_jp.value != blank -%}
+                      <p class="font-serif-jp text-sm text-kameya-warm-gray mt-0.5">
+                        {{ artist_page.metafields.artist.name_jp.value }}
+                      </p>
+                    {%- endif -%}
+                    {%- if artist_page.metafields.artist.craft.value != blank -%}
+                      <p class="font-sans text-xs tracking-[0.15em] uppercase text-kameya-warm-gray mt-2">
+                        {{ artist_page.metafields.artist.craft.value }}
+                      </p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} CTA Button {%- endcomment -%}
+    {%- if cta_text != blank and cta_link != blank -%}
+      <div class="mt-12 lg:mt-16 text-center">
+        <a
+          href="{{ cta_link }}"
+          class="inline-block border border-kameya-dark text-kameya-dark px-10 py-3.5 font-serif-en text-xs tracking-[0.2em] uppercase hover:bg-kameya-dark hover:text-white transition-all duration-400"
+        >
+          {{ cta_text }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Artists",
+  "tag": "section",
+  "class": "featured-artists-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Master Artisans"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Living National Treasures & Distinguished Artists"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Grid Columns (Desktop)",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2 Columns" },
+        { "value": "3", "label": "3 Columns" },
+        { "value": "4", "label": "4 Columns" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "kameya-offwhite",
+      "options": [
+        { "value": "kameya-offwhite", "label": "Off White" },
+        { "value": "white",           "label": "White" },
+        { "value": "kameya-cream",    "label": "Cream" },
+        { "value": "kameya-dark",     "label": "Dark" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "View All Artists"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "artist",
+      "name": "Artist (Manual)",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "artist_image",
+          "label": "Portrait Image"
+        },
+        {
+          "type": "text",
+          "id": "artist_name",
+          "label": "Name (English)",
+          "default": "Artist Name"
+        },
+        {
+          "type": "text",
+          "id": "artist_name_jp",
+          "label": "Name (Japanese)"
+        },
+        {
+          "type": "text",
+          "id": "artist_honor",
+          "label": "Honor / Title",
+          "info": "e.g. Living National Treasure, Order of Culture",
+          "default": "Living National Treasure"
+        },
+        {
+          "type": "text",
+          "id": "artist_craft",
+          "label": "Craft / Medium",
+          "default": "Ceramics"
+        },
+        {
+          "type": "textarea",
+          "id": "artist_brief",
+          "label": "Brief Description",
+          "info": "Shown on hover. Keep it concise (1-2 sentences)."
+        },
+        {
+          "type": "textarea",
+          "id": "artist_career_highlights",
+          "label": "Career Highlights",
+          "info": "Key awards, exhibitions, and achievements."
+        },
+        {
+          "type": "url",
+          "id": "artist_link",
+          "label": "Artist Page Link"
+        }
+      ]
+    },
+    {
+      "type": "artist_from_page",
+      "name": "Artist (from Page Metafields)",
+      "settings": [
+        {
+          "type": "page",
+          "id": "artist_page",
+          "label": "Artist Page",
+          "info": "Select a page with artist metafields defined."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Artists",
+      "category": "Artists",
+      "blocks": [
+        {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Manji Inoue",
+            "artist_name_jp": "井上萬二",
+            "artist_honor": "Living National Treasure",
+            "artist_craft": "White Porcelain (Hakuji)"
+          }
+        },
+        {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Ryozo Kawakita",
+            "artist_name_jp": "川北良造",
+            "artist_honor": "Living National Treasure",
+            "artist_craft": "Woodwork (Mokko)"
+          }
+        },
+        {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Hayato Otani",
+            "artist_name_jp": "大谷早人",
+            "artist_craft": "Ceramics"
+          }
+        },
+        {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Sekisui Ito V",
+            "artist_name_jp": "五代 伊藤赤水",
+            "artist_honor": "Living National Treasure",
+            "artist_craft": "Mumyoi Ware Pottery"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

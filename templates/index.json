@@ -1,0 +1,105 @@
+{
+  "name": "Home",
+  "sections": {
+    "hero_video": {
+      "type": "hero-video",
+      "settings": {
+        "heading": "The heart of harmony, Melody that echoes through the earth",
+        "subheading": "Kameya Japan Tradition",
+        "cta_text": "Explore Collection",
+        "cta_link": "shopify://collections/all",
+        "section_height": 100,
+        "overlay_opacity": 40,
+        "text_alignment": "center",
+        "show_scroll_indicator": true
+      }
+    },
+    "story_intro": {
+      "type": "story-section",
+      "settings": {
+        "heading": "Our Story",
+        "subheading": "Heritage & Craftsmanship",
+        "alternate_layout": true,
+        "bg_color": "white"
+      },
+      "blocks": {
+        "president_message": {
+          "type": "story_row",
+          "settings": {
+            "label": "Message from the President",
+            "title": "Bridging Tradition and the World",
+            "body": "<p>For generations, Japan's master artisans have poured their souls into creating works of extraordinary beauty. At Kameya Japan Tradition, we believe these treasures deserve a global stage — one that honors their heritage while connecting them with discerning collectors worldwide.</p>"
+          }
+        },
+        "quote_block": {
+          "type": "full_width_quote",
+          "settings": {
+            "quote": "True craftsmanship transcends borders. It speaks a universal language of beauty, patience, and devotion.",
+            "attribution": "President, Kameya Japan Tradition"
+          }
+        },
+        "jindai_story": {
+          "type": "story_row",
+          "settings": {
+            "label": "Rare Materials",
+            "title": "Jindai Zelkova — Wood from the Ancient Past",
+            "body": "<p>Buried beneath the earth for thousands of years, Jindai Zelkova (神代欅) emerges with a color and grain that cannot be replicated. This prehistoric timber, excavated from river beds and volcanic deposits, carries the weight of millennia — making each piece carved from it a bridge between the ancient world and the present.</p>"
+          }
+        }
+      },
+      "block_order": ["president_message", "quote_block", "jindai_story"]
+    },
+    "featured_artists": {
+      "type": "featured-artists",
+      "settings": {
+        "heading": "Master Artisans",
+        "subheading": "Living National Treasures & Distinguished Artists",
+        "columns": "4",
+        "bg_color": "kameya-cream"
+      },
+      "blocks": {
+        "artist_inoue": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Manji Inoue",
+            "artist_name_jp": "井上萬二",
+            "artist_honor": "Living National Treasure",
+            "artist_craft": "White Porcelain (Hakuji)",
+            "artist_brief": "A master of Arita ware white porcelain, renowned for his luminous vessels that embody purity and grace."
+          }
+        },
+        "artist_kawakita": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Ryozo Kawakita",
+            "artist_name_jp": "川北良造",
+            "artist_honor": "Living National Treasure",
+            "artist_craft": "Woodwork (Mokko)",
+            "artist_brief": "A Living National Treasure in woodturning, whose works celebrate the natural beauty of Japanese timber."
+          }
+        },
+        "artist_otani": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Hayato Otani",
+            "artist_name_jp": "大谷早人",
+            "artist_craft": "Contemporary Ceramics",
+            "artist_brief": "A bold contemporary ceramicist whose sculptural forms push the boundaries of traditional Japanese pottery."
+          }
+        },
+        "artist_ito": {
+          "type": "artist",
+          "settings": {
+            "artist_name": "Sekisui Ito V",
+            "artist_name_jp": "五代 伊藤赤水",
+            "artist_honor": "Living National Treasure",
+            "artist_craft": "Mumyoi Ware Pottery",
+            "artist_brief": "Fifth-generation master of Mumyoi ware from Sado Island, creating works with the island's distinctive red clay."
+          }
+        }
+      },
+      "block_order": ["artist_inoue", "artist_kawakita", "artist_otani", "artist_ito"]
+    }
+  },
+  "order": ["hero_video", "story_intro", "featured_artists"]
+}

@@ -1,0 +1,460 @@
+{%- comment -%}
+  Product Template – Luxury Hybrid
+  Handles both standard "Add to Cart" and "Inquire" modes.
+  Logic: if the product has the tag "is_luxury", show inquiry button instead of cart.
+{%- endcomment -%}
+
+{%- liquid
+  assign is_luxury = false
+  if product.tags contains 'is_luxury'
+    assign is_luxury = true
+  endif
+
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<section class="py-8 sm:py-12 lg:py-16">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+
+      {%- comment -%} ========== LEFT: Image Gallery ========== {%- endcomment -%}
+      <div class="product-gallery">
+        {%- comment -%} Main Image with Zoom {%- endcomment -%}
+        <div
+          class="product-gallery__main relative overflow-hidden bg-kameya-cream aspect-square cursor-zoom-in"
+          id="product-main-image"
+          onclick="this.classList.toggle('zoomed')"
+        >
+          {%- if product.featured_image != blank -%}
+            <img
+              id="product-main-img"
+              src="{{ product.featured_image | image_url: width: 1200 }}"
+              srcset="
+                {{ product.featured_image | image_url: width: 600 }} 600w,
+                {{ product.featured_image | image_url: width: 900 }} 900w,
+                {{ product.featured_image | image_url: width: 1200 }} 1200w,
+                {{ product.featured_image | image_url: width: 1800 }} 1800w
+              "
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              alt="{{ product.featured_image.alt | default: product.title }}"
+              class="w-full h-full object-contain transition-transform duration-300"
+              loading="eager"
+              fetchpriority="high"
+            >
+          {%- else -%}
+            <div class="w-full h-full flex items-center justify-center">
+              <svg class="w-24 h-24 text-kameya-light-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Thumbnail Strip {%- endcomment -%}
+        {%- if product.images.size > 1 -%}
+          <div class="product-gallery__thumbs mt-3 grid grid-cols-5 sm:grid-cols-6 gap-2">
+            {%- for image in product.images -%}
+              <button
+                type="button"
+                class="aspect-square overflow-hidden bg-kameya-cream border-2 transition-colors {% if forloop.first %}border-kameya-dark{% else %}border-transparent hover:border-kameya-warm-gray{% endif %}"
+                aria-label="View image {{ forloop.index }}"
+                onclick="
+                  document.getElementById('product-main-img').src = '{{ image | image_url: width: 1200 }}';
+                  document.getElementById('product-main-img').srcset = '{{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1200 }} 1200w, {{ image | image_url: width: 1800 }} 1800w';
+                  this.parentElement.querySelectorAll('button').forEach(b => b.classList.replace('border-kameya-dark','border-transparent'));
+                  this.classList.replace('border-transparent','border-kameya-dark');
+                "
+              >
+                <img
+                  src="{{ image | image_url: width: 200 }}"
+                  alt="{{ image.alt | default: product.title }} thumbnail {{ forloop.index }}"
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ========== RIGHT: Product Info ========== {%- endcomment -%}
+      <div class="product-info">
+
+        {%- comment -%} Breadcrumb {%- endcomment -%}
+        <nav class="mb-4 text-xs text-kameya-warm-gray font-sans" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-kameya-deep-red transition-colors">Home</a>
+          <span class="mx-1.5">/</span>
+          {%- if collection -%}
+            <a href="{{ collection.url }}" class="hover:text-kameya-deep-red transition-colors">{{ collection.title }}</a>
+            <span class="mx-1.5">/</span>
+          {%- endif -%}
+          <span class="text-kameya-dark">{{ product.title }}</span>
+        </nav>
+
+        {%- comment -%} Artist Link (if tagged) {%- endcomment -%}
+        {%- if product.vendor != blank -%}
+          <p class="font-serif-en text-xs tracking-[0.2em] uppercase text-kameya-muted-gold mb-2">
+            <a href="{{ product.vendor | url_for_vendor }}" class="hover:text-kameya-deep-red transition-colors">
+              {{ product.vendor }}
+            </a>
+          </p>
+        {%- endif -%}
+
+        {%- comment -%} Product Title {%- endcomment -%}
+        <h1 class="font-serif-en text-2xl sm:text-3xl lg:text-4xl font-light text-kameya-dark leading-tight tracking-wide">
+          {{ product.title }}
+        </h1>
+
+        {%- comment -%} Japanese Title (metafield) {%- endcomment -%}
+        {%- if product.metafields.custom.title_jp.value != blank -%}
+          <p class="font-serif-jp text-base text-kameya-warm-gray mt-1">
+            {{ product.metafields.custom.title_jp.value }}
+          </p>
+        {%- endif -%}
+
+        {%- comment -%} Price or Inquiry Label {%- endcomment -%}
+        <div class="mt-5 mb-6 pb-6 border-b border-kameya-light-gray/50">
+          {%- if is_luxury -%}
+            <p class="font-serif-en text-lg tracking-wide text-kameya-deep-red">
+              Price on Request
+            </p>
+          {%- else -%}
+            <div class="flex items-baseline space-x-3">
+              {%- if current_variant.compare_at_price > current_variant.price -%}
+                <span class="font-serif-en text-xl text-kameya-deep-red">
+                  {{ current_variant.price | money }}
+                </span>
+                <span class="text-sm text-kameya-warm-gray line-through">
+                  {{ current_variant.compare_at_price | money }}
+                </span>
+              {%- else -%}
+                <span class="font-serif-en text-xl text-kameya-dark">
+                  {{ current_variant.price | money }}
+                </span>
+              {%- endif -%}
+            </div>
+            {%- if current_variant.unit_price -%}
+              <p class="text-xs text-kameya-warm-gray mt-1">
+                {{ current_variant.unit_price | money }} / {{ current_variant.unit_price_measurement.reference_value }}{{ current_variant.unit_price_measurement.reference_unit }}
+              </p>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Short Description {%- endcomment -%}
+        {%- if product.description != blank -%}
+          <div class="product-description prose prose-sm max-w-none text-kameya-dark/80 leading-relaxed mb-6">
+            {{ product.description }}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Variant Selector (only if variants exist) {%- endcomment -%}
+        {%- if product.has_only_default_variant == false -%}
+          <div class="mb-6">
+            {%- for option in product.options_with_values -%}
+              <div class="mb-4">
+                <label class="block text-xs tracking-[0.15em] uppercase text-kameya-warm-gray mb-2 font-sans">
+                  {{ option.name }}
+                </label>
+                <div class="flex flex-wrap gap-2">
+                  {%- for value in option.values -%}
+                    <button
+                      type="button"
+                      class="px-4 py-2 border text-sm font-sans transition-colors
+                        {%- if option.selected_value == value %}
+                          border-kameya-dark text-kameya-dark bg-kameya-cream
+                        {%- else %}
+                          border-kameya-light-gray text-kameya-warm-gray hover:border-kameya-dark hover:text-kameya-dark
+                        {%- endif -%}"
+                    >
+                      {{ value }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ========== HYBRID ACTION BUTTONS ========== {%- endcomment -%}
+        {%- if is_luxury -%}
+          {%- comment -%} INQUIRY MODE for high-value pieces {%- endcomment -%}
+          <div class="space-y-3">
+            <a
+              href="{{ pages['inquiry'].url | default: '/pages/contact' }}?product={{ product.handle }}&title={{ product.title | url_encode }}"
+              class="w-full flex items-center justify-center px-8 py-4 bg-kameya-deep-red text-white font-serif-en text-sm tracking-[0.2em] uppercase hover:bg-kameya-urushi-red transition-colors duration-300"
+            >
+              <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              Inquire About This Piece
+            </a>
+            <p class="text-center text-xs text-kameya-warm-gray font-sans">
+              Our specialists will respond within 24 hours with pricing, availability, and shipping details.
+            </p>
+          </div>
+
+        {%- else -%}
+          {%- comment -%} STANDARD CART MODE {%- endcomment -%}
+          {%- form 'product', product -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+
+            <div class="space-y-3">
+              {%- if current_variant.available -%}
+                <button
+                  type="submit"
+                  class="w-full flex items-center justify-center px-8 py-4 bg-kameya-dark text-white font-serif-en text-sm tracking-[0.2em] uppercase hover:bg-kameya-charcoal transition-colors duration-300"
+                >
+                  <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                  </svg>
+                  Add to Cart
+                </button>
+              {%- else -%}
+                <button
+                  type="button"
+                  disabled
+                  class="w-full flex items-center justify-center px-8 py-4 bg-kameya-light-gray text-kameya-warm-gray font-serif-en text-sm tracking-[0.2em] uppercase cursor-not-allowed"
+                >
+                  Sold Out
+                </button>
+              {%- endif -%}
+            </div>
+          {%- endform -%}
+        {%- endif -%}
+
+        {%- comment -%} ========== ACCORDION DETAILS ========== {%- endcomment -%}
+        <div class="mt-8 border-t border-kameya-light-gray/50">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+
+              {%- when 'accordion_item' -%}
+                <details class="product-accordion group border-b border-kameya-light-gray/50" {{ block.shopify_attributes }}>
+                  <summary class="flex items-center justify-between py-4 cursor-pointer select-none">
+                    <span class="font-serif-en text-sm tracking-[0.1em] uppercase text-kameya-dark">
+                      {{ block.settings.title | default: 'Details' }}
+                    </span>
+                    <svg class="w-4 h-4 text-kameya-warm-gray transition-transform duration-300 group-open:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/>
+                    </svg>
+                  </summary>
+                  <div class="pb-4 text-sm text-kameya-dark/70 leading-relaxed font-sans">
+                    {{ block.settings.content }}
+                  </div>
+                </details>
+
+              {%- when 'accordion_metafield' -%}
+                {%- comment -%}
+                  Dynamic accordion from metafields.
+                  Useful for specs like material, technique, box type.
+                {%- endcomment -%}
+                {%- assign meta_namespace = block.settings.metafield_namespace | default: 'custom' -%}
+                {%- assign meta_key = block.settings.metafield_key -%}
+                {%- assign meta_value = product.metafields[meta_namespace][meta_key].value -%}
+                {%- if meta_value != blank -%}
+                  <details class="product-accordion group border-b border-kameya-light-gray/50" {{ block.shopify_attributes }}>
+                    <summary class="flex items-center justify-between py-4 cursor-pointer select-none">
+                      <span class="font-serif-en text-sm tracking-[0.1em] uppercase text-kameya-dark">
+                        {{ block.settings.title | default: meta_key | replace: '_', ' ' | capitalize }}
+                      </span>
+                      <svg class="w-4 h-4 text-kameya-warm-gray transition-transform duration-300 group-open:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/>
+                      </svg>
+                    </summary>
+                    <div class="pb-4 text-sm text-kameya-dark/70 leading-relaxed font-sans">
+                      {{ meta_value }}
+                    </div>
+                  </details>
+                {%- endif -%}
+
+              {%- when 'artist_info' -%}
+                {%- comment -%} Link to artist profile page {%- endcomment -%}
+                <div class="py-5 border-b border-kameya-light-gray/50" {{ block.shopify_attributes }}>
+                  <div class="flex items-center space-x-4">
+                    {%- if block.settings.artist_image != blank -%}
+                      <img
+                        src="{{ block.settings.artist_image | image_url: width: 80 }}"
+                        alt="{{ block.settings.artist_name }}"
+                        class="w-14 h-14 rounded-full object-cover"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
+                    <div class="flex-1 min-w-0">
+                      <p class="font-serif-en text-sm text-kameya-dark font-medium">
+                        {{ block.settings.artist_name | default: product.vendor }}
+                      </p>
+                      {%- if block.settings.artist_title != blank -%}
+                        <p class="text-xs text-kameya-muted-gold mt-0.5">{{ block.settings.artist_title }}</p>
+                      {%- endif -%}
+                    </div>
+                    {%- if block.settings.artist_page_link != blank -%}
+                      <a href="{{ block.settings.artist_page_link }}" class="text-xs font-serif-en tracking-[0.1em] uppercase text-kameya-deep-red hover:underline whitespace-nowrap">
+                        View Profile
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </div>
+
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Trust Badges {%- endcomment -%}
+        <div class="mt-8 grid grid-cols-3 gap-4 text-center">
+          <div>
+            <svg class="w-6 h-6 mx-auto text-kameya-warm-gray mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <p class="text-[10px] tracking-[0.1em] uppercase text-kameya-warm-gray font-sans">Authenticity Guaranteed</p>
+          </div>
+          <div>
+            <svg class="w-6 h-6 mx-auto text-kameya-warm-gray mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+            <p class="text-[10px] tracking-[0.1em] uppercase text-kameya-warm-gray font-sans">Museum-Grade Packing</p>
+          </div>
+          <div>
+            <svg class="w-6 h-6 mx-auto text-kameya-warm-gray mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p class="text-[10px] tracking-[0.1em] uppercase text-kameya-warm-gray font-sans">Worldwide Shipping</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product – Luxury Hybrid",
+  "tag": "section",
+  "class": "product-template-luxury",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Inquiry Mode"
+    },
+    {
+      "type": "paragraph",
+      "content": "Products tagged with 'is_luxury' will show an inquiry button instead of 'Add to Cart'. Configure the inquiry destination page below."
+    },
+    {
+      "type": "page",
+      "id": "inquiry_page",
+      "label": "Inquiry Page",
+      "info": "The page to link to for luxury inquiries. Defaults to /pages/contact."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_item",
+      "name": "Accordion – Manual",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Details"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    },
+    {
+      "type": "accordion_metafield",
+      "name": "Accordion – Metafield",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Display Title",
+          "default": "Material"
+        },
+        {
+          "type": "text",
+          "id": "metafield_namespace",
+          "label": "Metafield Namespace",
+          "default": "custom"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Metafield Key",
+          "info": "e.g. material, technique, box_type"
+        }
+      ]
+    },
+    {
+      "type": "artist_info",
+      "name": "Artist Info Card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "artist_image",
+          "label": "Artist Portrait"
+        },
+        {
+          "type": "text",
+          "id": "artist_name",
+          "label": "Artist Name"
+        },
+        {
+          "type": "text",
+          "id": "artist_title",
+          "label": "Title / Honor",
+          "default": "Living National Treasure"
+        },
+        {
+          "type": "url",
+          "id": "artist_page_link",
+          "label": "Artist Page Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product – Luxury Hybrid",
+      "category": "Product",
+      "blocks": [
+        {
+          "type": "artist_info",
+          "settings": {
+            "artist_name": "Artist Name"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Materials & Technique"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Dimensions & Weight"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Provenance & Certification"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipping & Handling"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

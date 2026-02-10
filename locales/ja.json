@@ -1,0 +1,48 @@
+{
+  "general": {
+    "skip_to_content": "コンテンツへスキップ",
+    "search": "検索",
+    "cart": "カート",
+    "account": "アカウント",
+    "scroll": "スクロール"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "カートに追加",
+      "sold_out": "売り切れ",
+      "inquire": "この作品についてお問い合わせ",
+      "price_on_request": "価格はお問い合わせください",
+      "inquiry_note": "専門スタッフが24時間以内に、価格・在庫状況・配送に関する詳細をご連絡いたします。",
+      "view_artist": "プロフィールを見る",
+      "details": "詳細",
+      "materials": "素材・技法",
+      "dimensions": "寸法・重量",
+      "provenance": "来歴・証明書",
+      "shipping": "配送・梱包"
+    },
+    "trust": {
+      "authenticity": "真贋保証",
+      "packing": "美術品梱包",
+      "worldwide": "海外配送対応"
+    }
+  },
+  "sections": {
+    "hero": {
+      "heading": "調和のこころ、大地に響く旋律",
+      "subheading": "亀屋ジャパントラディション",
+      "cta": "コレクションを見る"
+    },
+    "artists": {
+      "heading": "作家紹介",
+      "subheading": "人間国宝・著名作家",
+      "view_all": "作家一覧を見る"
+    },
+    "story": {
+      "heading": "私たちの物語",
+      "subheading": "伝統と技"
+    }
+  },
+  "footer": {
+    "copyright": "All rights reserved."
+  }
+}

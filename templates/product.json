@@ -1,0 +1,42 @@
+{
+  "name": "Product",
+  "sections": {
+    "main_product": {
+      "type": "product-template-luxury",
+      "settings": {},
+      "blocks": {
+        "artist_card": {
+          "type": "artist_info",
+          "settings": {}
+        },
+        "accordion_material": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Materials & Technique"
+          }
+        },
+        "accordion_dimensions": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Dimensions & Weight"
+          }
+        },
+        "accordion_provenance": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Provenance & Certification"
+          }
+        },
+        "accordion_shipping": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipping & Handling",
+            "content": "<p>All works are carefully packaged using museum-grade materials. International shipping is available via insured express courier. Customs duties and import taxes may apply and are the responsibility of the buyer.</p>"
+          }
+        }
+      },
+      "block_order": ["artist_card", "accordion_material", "accordion_dimensions", "accordion_provenance", "accordion_shipping"]
+    }
+  },
+  "order": ["main_product"]
+}

@@ -1,0 +1,48 @@
+{
+  "general": {
+    "skip_to_content": "Skip to content",
+    "search": "Search",
+    "cart": "Cart",
+    "account": "Account",
+    "scroll": "Scroll"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "inquire": "Inquire About This Piece",
+      "price_on_request": "Price on Request",
+      "inquiry_note": "Our specialists will respond within 24 hours with pricing, availability, and shipping details.",
+      "view_artist": "View Profile",
+      "details": "Details",
+      "materials": "Materials & Technique",
+      "dimensions": "Dimensions & Weight",
+      "provenance": "Provenance & Certification",
+      "shipping": "Shipping & Handling"
+    },
+    "trust": {
+      "authenticity": "Authenticity Guaranteed",
+      "packing": "Museum-Grade Packing",
+      "worldwide": "Worldwide Shipping"
+    }
+  },
+  "sections": {
+    "hero": {
+      "heading": "The heart of harmony, Melody that echoes through the earth",
+      "subheading": "Kameya Japan Tradition",
+      "cta": "Explore Collection"
+    },
+    "artists": {
+      "heading": "Master Artisans",
+      "subheading": "Living National Treasures & Distinguished Artists",
+      "view_all": "View All Artists"
+    },
+    "story": {
+      "heading": "Our Story",
+      "subheading": "Heritage & Craftsmanship"
+    }
+  },
+  "footer": {
+    "copyright": "All rights reserved."
+  }
+}

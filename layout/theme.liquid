@@ -1,0 +1,269 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0">
+
+  {%- comment -%} SEO Meta Tags {%- endcomment -%}
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+  {%- endif -%}
+
+  {%- comment -%} Google Fonts: Noto Serif JP + Cormorant Garamond {%- endcomment -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+JP:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  {%- comment -%} Tailwind CSS CDN {%- endcomment -%}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'kameya': {
+              'offwhite':   '#F5F2ED',
+              'cream':      '#EDE8E0',
+              'dark':       '#1A1A1A',
+              'charcoal':   '#2D2D2D',
+              'deep-red':   '#8B1A1A',
+              'urushi-red': '#A0242A',
+              'gold':       '#B8963E',
+              'muted-gold': '#C9A84C',
+              'warm-gray':  '#8A8378',
+              'light-gray': '#D4CFC7',
+            }
+          },
+          fontFamily: {
+            'serif-jp':  ['"Noto Serif JP"', 'serif'],
+            'serif-en':  ['"Cormorant Garamond"', 'serif'],
+            'sans':      ['"Inter"', 'sans-serif'],
+          },
+          spacing: {
+            '18': '4.5rem',
+            '88': '22rem',
+            '128': '32rem',
+          }
+        }
+      }
+    }
+  </script>
+
+  {%- comment -%} Theme Stylesheet {%- endcomment -%}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  {%- comment -%} Shopify Required {%- endcomment -%}
+  {{ content_for_header }}
+
+  {%- comment -%} Open Graph / Social {%- endcomment -%}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page_title }}">
+  {%- if page_description -%}
+    <meta property="og:description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- if settings.share_image -%}
+    <meta property="og:image" content="{{ settings.share_image | image_url: width: 1200 }}">
+  {%- endif -%}
+
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="template-{{ template.name | handle }} bg-kameya-offwhite text-kameya-dark font-sans antialiased">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-kameya-dark focus:text-white focus:px-4 focus:py-2" href="#main-content">
+    Skip to content
+  </a>
+
+  {%- comment -%} ========== HEADER ========== {%- endcomment -%}
+  <header class="sticky top-0 z-40 bg-kameya-offwhite/95 backdrop-blur-sm border-b border-kameya-light-gray/50" role="banner">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+
+        {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
+        <button
+          type="button"
+          class="lg:hidden p-2 text-kameya-dark hover:text-kameya-deep-red transition-colors"
+          aria-label="Open menu"
+          onclick="document.getElementById('mobile-nav').classList.toggle('hidden')"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        {%- comment -%} Logo {%- endcomment -%}
+        <a href="/" class="flex-shrink-0">
+          {%- if settings.logo != blank -%}
+            <img
+              src="{{ settings.logo | image_url: width: 280 }}"
+              alt="{{ shop.name }}"
+              class="h-8 lg:h-10 w-auto"
+              loading="eager"
+            >
+          {%- else -%}
+            <span class="font-serif-en text-xl lg:text-2xl font-semibold tracking-wide text-kameya-dark">
+              {{ shop.name }}
+            </span>
+          {%- endif -%}
+        </a>
+
+        {%- comment -%} Desktop Navigation {%- endcomment -%}
+        <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Main navigation">
+          {%- for link in linklists.main-menu.links -%}
+            {%- if link.links != blank -%}
+              <div class="relative group">
+                <a href="{{ link.url }}" class="nav-link font-serif-en text-sm tracking-widest uppercase text-kameya-dark hover:text-kameya-deep-red transition-colors py-2">
+                  {{ link.title }}
+                </a>
+                <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <div class="bg-white shadow-xl border border-kameya-light-gray/30 min-w-[200px] py-2">
+                    {%- for child_link in link.links -%}
+                      <a href="{{ child_link.url }}" class="block px-5 py-2 text-sm text-kameya-dark hover:text-kameya-deep-red hover:bg-kameya-cream/50 transition-colors">
+                        {{ child_link.title }}
+                      </a>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            {%- else -%}
+              <a href="{{ link.url }}" class="nav-link font-serif-en text-sm tracking-widest uppercase text-kameya-dark hover:text-kameya-deep-red transition-colors py-2">
+                {{ link.title }}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+
+        {%- comment -%} Header Icons (Search, Account, Cart) {%- endcomment -%}
+        <div class="flex items-center space-x-4">
+          <a href="{{ routes.search_url }}" class="p-2 text-kameya-dark hover:text-kameya-deep-red transition-colors" aria-label="Search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </a>
+
+          {%- if shop.customer_accounts_enabled -%}
+            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="p-2 text-kameya-dark hover:text-kameya-deep-red transition-colors" aria-label="Account">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          <a href="{{ routes.cart_url }}" class="p-2 text-kameya-dark hover:text-kameya-deep-red transition-colors relative" aria-label="Cart ({{ cart.item_count }})">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            {%- if cart.item_count > 0 -%}
+              <span class="absolute -top-1 -right-1 bg-kameya-deep-red text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-sans">
+                {{ cart.item_count }}
+              </span>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} Mobile Navigation {%- endcomment -%}
+      <nav id="mobile-nav" class="hidden lg:hidden pb-4" role="navigation" aria-label="Mobile navigation">
+        {%- for link in linklists.main-menu.links -%}
+          <a href="{{ link.url }}" class="block py-3 border-b border-kameya-light-gray/30 font-serif-en text-sm tracking-widest uppercase text-kameya-dark hover:text-kameya-deep-red transition-colors">
+            {{ link.title }}
+          </a>
+          {%- for child_link in link.links -%}
+            <a href="{{ child_link.url }}" class="block py-2 pl-4 text-sm text-kameya-warm-gray hover:text-kameya-deep-red transition-colors">
+              {{ child_link.title }}
+            </a>
+          {%- endfor -%}
+        {%- endfor -%}
+      </nav>
+    </div>
+  </header>
+
+  {%- comment -%} ========== MAIN CONTENT ========== {%- endcomment -%}
+  <main id="main-content" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {%- comment -%} ========== FOOTER ========== {%- endcomment -%}
+  <footer class="bg-kameya-dark text-kameya-cream/80 mt-24" role="contentinfo">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+
+        {%- comment -%} Brand Column {%- endcomment -%}
+        <div class="lg:col-span-1">
+          <span class="font-serif-en text-xl font-semibold text-white tracking-wide">{{ shop.name }}</span>
+          <p class="mt-4 text-sm leading-relaxed text-kameya-cream/60">
+            Curating Japan's finest traditional craftsmanship for discerning collectors worldwide. Each piece tells a story of heritage, mastery, and timeless beauty.
+          </p>
+        </div>
+
+        {%- comment -%} Navigation Columns {%- endcomment -%}
+        {%- for link in linklists.footer.links -%}
+          {%- if link.links != blank -%}
+            <div>
+              <h3 class="font-serif-en text-sm tracking-widest uppercase text-kameya-muted-gold mb-4">{{ link.title }}</h3>
+              <ul class="space-y-2">
+                {%- for child_link in link.links -%}
+                  <li>
+                    <a href="{{ child_link.url }}" class="text-sm text-kameya-cream/60 hover:text-white transition-colors">
+                      {{ child_link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Contact Column {%- endcomment -%}
+        <div>
+          <h3 class="font-serif-en text-sm tracking-widest uppercase text-kameya-muted-gold mb-4">Contact</h3>
+          <ul class="space-y-2 text-sm text-kameya-cream/60">
+            <li>
+              <a href="mailto:{{ shop.email }}" class="hover:text-white transition-colors">{{ shop.email }}</a>
+            </li>
+          </ul>
+          <div class="mt-6 flex space-x-4">
+            {%- if settings.social_instagram_link != blank -%}
+              <a href="{{ settings.social_instagram_link }}" class="text-kameya-cream/40 hover:text-white transition-colors" aria-label="Instagram" target="_blank" rel="noopener">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Bottom Bar {%- endcomment -%}
+      <div class="mt-16 pt-8 border-t border-kameya-cream/10 flex flex-col md:flex-row items-center justify-between text-xs text-kameya-cream/40">
+        <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+        <div class="mt-4 md:mt-0 flex space-x-6">
+          {%- for link in linklists['footer-legal'].links -%}
+            <a href="{{ link.url }}" class="hover:text-white transition-colors">{{ link.title }}</a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  {%- comment -%} Global JS {%- endcomment -%}
+  <script>
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+  </script>
+</body>
+</html>
