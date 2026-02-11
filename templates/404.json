@@ -1,10 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "404",
   "sections": {
     "main_404": {
       "type": "main-404",
+      "custom_css": [],
       "settings": {}
+    },
+    "story_section_Lkm7Ci": {
+      "type": "story-section",
+      "blocks": {
+        "story_row_HqxGeM": {
+          "type": "story_row",
+          "settings": {
+            "image_caption": "",
+            "image_position": "auto",
+            "label": "Message from the President",
+            "title": "Bridging Tradition and the World",
+            "body": "<p>For generations, Japan's master artisans have poured their souls into creating works of extraordinary beauty. At Kameya Japan Tradition, we believe these treasures deserve a global stage — one that honors their heritage while connecting them with discerning collectors worldwide.</p>",
+            "cta_text": "",
+            "cta_link": ""
+          }
+        },
+        "full_width_quote_9CXMmX": {
+          "type": "full_width_quote",
+          "settings": {
+            "quote": "True craftsmanship transcends borders. It speaks a universal language of beauty, patience, and devotion.",
+            "attribution": "President, Kameya Japan Tradition"
+          }
+        },
+        "story_row_xRWXFc": {
+          "type": "story_row",
+          "settings": {
+            "image_caption": "",
+            "image_position": "auto",
+            "label": "Rare Materials",
+            "title": "Jindai Zelkova — Wood from the Ancient Past",
+            "body": "<p>Buried beneath the earth for thousands of years, Jindai Zelkova (神代欅) emerges with a color and grain that cannot be replicated. This prehistoric timber, excavated from river beds and volcanic deposits, carries the weight of millennia — making each piece carved from it a bridge between the ancient world and the present.</p>",
+            "cta_text": "",
+            "cta_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "story_row_HqxGeM",
+        "full_width_quote_9CXMmX",
+        "story_row_xRWXFc"
+      ],
+      "name": "Story Section",
+      "settings": {
+        "heading": "Our Story",
+        "subheading": "Heritage & Craftsmanship",
+        "alternate_layout": true,
+        "bg_color": "white"
+      }
     }
   },
-  "order": ["main_404"]
+  "order": [
+    "main_404",
+    "story_section_Lkm7Ci"
+  ]
 }
