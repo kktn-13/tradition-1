@@ -15,9 +15,62 @@
         "products_per_page": 12,
         "columns": "3"
       }
+    },
+    "product_template_luxury_xAnDwT": {
+      "type": "product-template-luxury",
+      "blocks": {
+        "artist_info_aXcVqC": {
+          "type": "artist_info",
+          "settings": {
+            "artist_name": "Artist Name",
+            "artist_title": "Living National Treasure",
+            "artist_page_link": ""
+          }
+        },
+        "accordion_item_w9Dzhy": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Materials & Technique",
+            "content": ""
+          }
+        },
+        "accordion_item_hFtpiH": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Dimensions & Weight",
+            "content": ""
+          }
+        },
+        "accordion_item_7yUnEy": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Provenance & Certification",
+            "content": ""
+          }
+        },
+        "accordion_item_RLfELq": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipping & Handling",
+            "content": ""
+          }
+        }
+      },
+      "block_order": [
+        "artist_info_aXcVqC",
+        "accordion_item_w9Dzhy",
+        "accordion_item_hFtpiH",
+        "accordion_item_7yUnEy",
+        "accordion_item_RLfELq"
+      ],
+      "name": "Product – Luxury Hybrid",
+      "settings": {
+        "inquiry_page": "contact"
+      }
     }
   },
   "order": [
-    "main_collection"
+    "main_collection",
+    "product_template_luxury_xAnDwT"
   ]
 }

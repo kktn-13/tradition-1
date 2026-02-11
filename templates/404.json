@@ -11,6 +11,7 @@
   "sections": {
     "main_404": {
       "type": "main-404",
+      "disabled": true,
       "custom_css": [],
       "settings": {}
     },
