@@ -19,6 +19,13 @@
     "product_template_luxury_xAnDwT": {
       "type": "product-template-luxury",
       "blocks": {
+        "accordion_item_3WwzAN": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shinemon Kiln: Shinsha \"Jewel Red\" Yunomi",
+            "content": "<p><strong>Gemstone Brilliance for Your Daily Ritual </strong>Experience the \"Jewel Red\" of Arita ware. This Yunomi (tea cup) features the renowned <em>Shinsha</em> (copper red) glaze, a signature of the Shinemon Kiln. Fired at high temperatures, the copper glaze transforms into a deep, transparent ruby hue that glows with a serene radiance . Perfectly shaped for your hands, this cup turns a simple tea break into a moment of meditative beauty.    </p><p></p><ul><li><strong>Kiln:</strong> Shinemon Kiln (Arita, Japan)     </li><li><strong>Material:</strong> Porcelain    </li><li><strong>Technique:</strong> Shinsha (Copper Red Glaze)<br/><br/></li></ul>"
+          }
+        },
         "artist_info_aXcVqC": {
           "type": "artist_info",
           "settings": {
@@ -57,6 +64,7 @@
         }
       },
       "block_order": [
+        "accordion_item_3WwzAN",
         "artist_info_aXcVqC",
         "accordion_item_w9Dzhy",
         "accordion_item_hFtpiH",
